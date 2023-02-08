@@ -1,0 +1,13 @@
+<div class="relative bg-teal-400 md:pt-20 pb-20 mt-20 mb-10">
+  <div class="mx-10">
+    <div *ngIf="switchComponent; then thenBlock; else elseBlock"></div>
+    <ng-template #thenBlock>
+      <app-datatable
+        (changePageEvent)="receiveChangeEvent($event)"
+      ></app-datatable>
+    </ng-template>
+    <ng-template #elseBlock>
+      <app-add (changePageEvent)="receiveChangeEvent($event)"></app-add>
+    </ng-template>
+  </div>
+</div>

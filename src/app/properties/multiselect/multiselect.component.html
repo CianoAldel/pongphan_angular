@@ -1,0 +1,40 @@
+<div class="flex">
+  <ng-container *ngFor="let select of selectData">
+    <div class="flex w-14 h-6 rounded-full bg-teal-300 justify-center">
+      <div class="absolute text-sm" style="padding-top: 3px">
+        {{ select.item }}
+      </div>
+      <div
+        class="absolute pl-8 text-xs text-white"
+        style="cursor: pointer"
+        (click)="removeChip(select)"
+      >
+        x
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<mat-form-field class="full-width">
+  <input
+    matInput
+    type="text"
+    [placeholder]="placeholder"
+    [matAutocomplete]="auto"
+    [formControl]="selectControl"
+  />
+</mat-form-field>
+
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+  <mat-option *ngFor="let data of filteredData | async">
+    <div (click)="optionClicked($event, data)">
+      <mat-checkbox
+        [checked]="data.selected"
+        (change)="toggleSelection(data)"
+        (click)="$event.stopPropagation()"
+      >
+        {{ data.item }}
+      </mat-checkbox>
+    </div>
+  </mat-option>
+</mat-autocomplete>
