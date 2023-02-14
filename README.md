@@ -28,3 +28,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 create new component
 ng g c [name]
+
+## generate service
+
+ng g s services/user

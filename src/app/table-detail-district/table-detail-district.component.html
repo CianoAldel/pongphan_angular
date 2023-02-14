@@ -8,6 +8,14 @@
       เพิ่มข้อมูล
     </button>
 
+    <button
+      class="bg-teal-500 text-white active:bg-teal-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button"
+      (click)="dowloadPDF()"
+    >
+      พิมพ์รายชื่อแบบ pdf
+    </button>
+
     <div class="mb-4">
       <label class="block text-white text-sm font-bold mb-2" for="username">
         ค้นหาชื่อ
@@ -68,3 +76,9 @@
   aria-label="Select page of periodic elements"
 >
 </mat-paginator>
+
+<script>
+  var test = "test1";
+
+  console.log(test);
+</script>

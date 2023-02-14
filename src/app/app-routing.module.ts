@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ShowStatisticsComponent } from './statistics/show-statistics/show-statistics.component';
-import { ShowComponent } from './stay/show/show.component';
-import { AddComponent } from './stay/add/add.component';
+import { ShowDataDistrictComponent } from './show-data-district/show-data-district.component';
+import { ShowDataProvinceComponent } from './show-data-province/show-data-province.component';
 
 const routes: Routes = [
-  { path: 'show-statistics', component: ShowStatisticsComponent },
-  { path: 'show-stay', component: ShowComponent },
-  { path: '', redirectTo: '/show-statistics', pathMatch: 'full' },
+  { path: 'table-district', component: ShowDataDistrictComponent },
+  { path: 'table-provice', component: ShowDataProvinceComponent },
+  { path: '', redirectTo: '/table-district', pathMatch: 'full' },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

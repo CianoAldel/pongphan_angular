@@ -80,7 +80,7 @@
       <ul class="md:flex-col md:min-w-full flex flex-col list-none">
         <li class="items-center">
           <a
-            [routerLink]="['/show-statistics']"
+            [routerLink]="['/table-provice']"
             class="text-xs uppercase py-3 font-bold block"
             routerLinkActive
             #adminDashboard="routerLinkActive"
@@ -96,13 +96,13 @@
                 adminDashboard.isActive ? 'opacity-75' : 'text-blueGray-300'
               "
             ></i>
-            <span class="text-sm">สถิติผู้เข้าพัก</span>
+            <span class="text-sm">รายการข้อมูลจังหวัด</span>
           </a>
         </li>
 
         <li class="items-center">
           <a
-            [routerLink]="['/show-stay']"
+            [routerLink]="['/table-district']"
             class="text-xs uppercase py-3 font-bold block"
             routerLinkActive
             #adminSettings="routerLinkActive"
@@ -118,7 +118,7 @@
                 adminSettings.isActive ? 'opacity-75' : 'text-blueGray-300'
               "
             ></i>
-            <span class="text-sm">รายการข้อมูล</span>
+            <span class="text-sm">รายการข้อมูลอำเภอ</span>
           </a>
         </li>
 
