@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DetailService } from 'src/app/services/detail.service';
 
 @Component({
   selector: 'app-delete',
@@ -8,12 +10,21 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class DeleteComponent implements OnInit {
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private matDialogRef: MatDialogRef<DeleteComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { id: number }
+    @Inject(MAT_DIALOG_DATA) public data: { id: number },
+    private detailService: DetailService
   ) {}
 
-  ngOnInit(): void {
-    console.log('id', this.data.id);
+  ngOnInit(): void {}
+
+  deleteData() {
+    this.detailService.deleteDetail(this.data.id);
+    this.closeToggleModal();
+    this.router
+      .navigateByUrl('/table-province', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/table-province']));
   }
 
   closeToggleModal() {

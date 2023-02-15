@@ -6,6 +6,7 @@ import { retry, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { Province } from '../Interface/Province';
 import { District } from '../Interface/District';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -17,8 +18,6 @@ export class DetailService {
   saveDetail(details: Detail) {
     const headers = { 'content-type': 'application/json' };
     const body = JSON.stringify(details);
-
-    console.log('service details', body);
 
     this.http
       .post<{ details: Detail }>(

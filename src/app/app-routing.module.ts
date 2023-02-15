@@ -5,7 +5,7 @@ import { ShowDataProvinceComponent } from './show-data-province/show-data-provin
 
 const routes: Routes = [
   { path: 'table-district', component: ShowDataDistrictComponent },
-  { path: 'table-provice', component: ShowDataProvinceComponent },
+  { path: 'table-province', component: ShowDataProvinceComponent },
   { path: '', redirectTo: '/table-district', pathMatch: 'full' },
 ];
 @NgModule({

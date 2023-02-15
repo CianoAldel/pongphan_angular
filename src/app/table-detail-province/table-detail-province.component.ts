@@ -17,6 +17,7 @@ import autoTable from 'jspdf-autotable';
 import { font } from './util';
 import { DetailService } from '../services/detail.service';
 import { Province } from '../Interface/Province';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-table-detail-province',
@@ -31,6 +32,7 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
   dataChangePage!: boolean;
   dataSource: any;
   province: Array<Province> = [];
+  newDate: string;
 
   constructor(
     private matDialog: MatDialog,
@@ -40,6 +42,11 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.detailService.getProvince().subscribe((response: Province[]) => {
       this.province = response;
+
+      this.province.map((array, index) => {
+        array.dateIn = moment(array.dateIn).format('YYYY-MM-DD HH:mm');
+        array.checkOut = moment(array.checkOut).format('YYYY-MM-DD HH:mm');
+      });
 
       this.dataSource = new MatTableDataSource<Province>(this.province);
       this.dataSource.paginator = this.paginator;
@@ -105,7 +112,6 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
       'วันเวลาที่เข้ามาพัก',
       'ห้องพักเลขที่',
       'ชื่อ-นามสกุล',
-      'ห้องพักเลขที่',
       'สัญชาติ',
       'เลขประจำตัวประชาชน หรือ ใบสำคัญประจำตัวคนต่างด้าว หรือหนังสือเดินทาง เลขที่... ออกให้โดย...',
       'ที่อยู่ปัจจุบันอยู่ที่ ตำบล อำเภอ จังหวัด หรือประเทศใด',
@@ -162,6 +168,7 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
 
       margin: { top: 30 },
       headStyles: {
+        halign: 'center',
         fontStyle: 'bold',
         textColor: [0, 0, 0],
         fillColor: [255, 255, 255],

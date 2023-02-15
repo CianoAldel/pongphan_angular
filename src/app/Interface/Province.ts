@@ -1,9 +1,9 @@
 export interface Province {
   id: number;
-  dateIn: Date | string | null;
+  dateIn: Date | string;
   roomNo: string | null;
-  firstname: string | null;
-  lastname: string | null;
+  firstname: string;
+  lastname: string;
   nationality: string | null;
   idCard: string | null;
   address: string | null;

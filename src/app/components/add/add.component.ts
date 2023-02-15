@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DetailService } from 'src/app/services/detail.service';
 import { formatDate } from '@angular/common';
 import { FormBuilder } from '@angular/forms';
@@ -36,7 +36,8 @@ export class AddComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private detailService: DetailService
+    private detailService: DetailService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -91,6 +92,10 @@ export class AddComponent implements OnInit {
     console.log('detail form', detail);
 
     this.detailService.saveDetail(detail);
+    this.router
+      .navigateByUrl('/table-province', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/table-province']));
+    this.changePage(false);
   }
 
   receiveValue(event: number) {
