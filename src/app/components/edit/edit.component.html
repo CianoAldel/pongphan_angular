@@ -32,14 +32,42 @@
                 <div class="relative w-full mb-3">
                   <label
                     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
                   >
-                    Username
+                    วันเวลาที่เข้ามาพัก
+                  </label>
+                  <app-calendar
+                    (dateEvent)="receiveDateInEvent($event)"
+                  ></app-calendar>
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    ห้องพักเลขที่
+                  </label>
+                  <app-multiselect
+                    placeholder="เลือกห้องพัก..."
+                    key="options"
+                    [data]="selectOptions"
+                    (result)="selectChange($event)"
+                  >
+                  </app-multiselect>
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    ชื่อ
                   </label>
                   <input
                     type="text"
+                    name="firstname"
+                    [(ngModel)]="firstname"
                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value="lucky.jesse"
                   />
                 </div>
               </div>
@@ -47,14 +75,14 @@
                 <div class="relative w-full mb-3">
                   <label
                     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
                   >
-                    Email address
+                    นามสกุล
                   </label>
                   <input
-                    type="email"
+                    name="lastname"
+                    [(ngModel)]="lastname"
+                    type="text"
                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value="jesse@example.com"
                   />
                 </div>
               </div>
@@ -62,14 +90,14 @@
                 <div class="relative w-full mb-3">
                   <label
                     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
                   >
-                    First Name
+                    สัญชาติ
                   </label>
                   <input
+                    name="nationality"
+                    [(ngModel)]="nationality"
                     type="text"
                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value="Lucky"
                   />
                 </div>
               </div>
@@ -77,113 +105,169 @@
                 <div class="relative w-full mb-3">
                   <label
                     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
                   >
-                    Last Name
+                    เลขบัตรประจำตัวประชาชน
+                  </label>
+                  <input
+                    name="idCard"
+                    [(ngModel)]="idCard"
+                    type="text"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    ที่อยู่
+                  </label>
+                  <input
+                    name="address"
+                    [(ngModel)]="address"
+                    type="text"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    อาชีพ
+                  </label>
+                  <input
+                    name="occupation"
+                    [(ngModel)]="occupation"
+                    type="text"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    มาจากที่ไหน
+                  </label>
+                  <input
+                    name="comefrom"
+                    [(ngModel)]="comefrom"
+                    type="text"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    จะไปที่ไหน
+                  </label>
+                  <input
+                    name="goto"
+                    [(ngModel)]="goto"
+                    type="text"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    วันเวลาที่ออกไป
+                  </label>
+                  <app-calendar
+                    (checkOutDateEvent)="receiveCheckOutEvent($event)"
+                  ></app-calendar>
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    รวมจำนวนวันที่เข้าพัก
+                  </label>
+                  <input
+                    name="quantityStay"
+                    [(ngModel)]="quantityStay"
+                    type="number"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    ห้องพักราคา
+                  </label>
+                  <input
+                    name="priceroom"
+                    [(ngModel)]="priceroom"
+                    type="text"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    รวมเป็นเงินค่าเข้าพัก (บาท)
                   </label>
                   <input
                     type="text"
                     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value="Jesse"
+                    name="priceStay"
+                    pattern="^[0-9]*$"
+                    [(ngModel)]="priceStay"
+                    (ngModelChange)="receiveValue(priceStay)"
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    รวมเป็นเงินค่าธรรมเนียม
+                  </label>
+                  <input
+                    type="text"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    name="charge"
+                    [(ngModel)]="charge"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="w-full lg:w-6/12 px-4">
+                <div class="relative w-full mb-3">
+                  <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                  >
+                    หมายเหตุ
+                  </label>
+                  <input
+                    name="note"
+                    [(ngModel)]="note"
+                    type="text"
+                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   />
                 </div>
               </div>
             </div>
-
             <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-            <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-              Contact Information
-            </h6>
-            <div class="flex flex-wrap">
-              <div class="w-full lg:w-12/12 px-4">
-                <div class="relative w-full mb-3">
-                  <label
-                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Address
-                  </label>
-                  <input
-                    type="text"
-                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                  />
-                </div>
-              </div>
-              <div class="w-full lg:w-4/12 px-4">
-                <div class="relative w-full mb-3">
-                  <label
-                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    City
-                  </label>
-                  <input
-                    type="email"
-                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value="New York"
-                  />
-                </div>
-              </div>
-              <div class="w-full lg:w-4/12 px-4">
-                <div class="relative w-full mb-3">
-                  <label
-                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Country
-                  </label>
-                  <input
-                    type="text"
-                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value="United States"
-                  />
-                </div>
-              </div>
-              <div class="w-full lg:w-4/12 px-4">
-                <div class="relative w-full mb-3">
-                  <label
-                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    Postal Code
-                  </label>
-                  <input
-                    type="text"
-                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    value="Postal Code"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-            <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-              About Me
-            </h6>
-            <div class="flex flex-wrap">
-              <div class="w-full lg:w-12/12 px-4">
-                <div class="relative w-full mb-3">
-                  <label
-                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                    htmlFor="grid-password"
-                  >
-                    About me
-                  </label>
-                  <textarea
-                    type="text"
-                    class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                    rows="4"
-                  >
-                        A beautiful UI Kit and Admin for Angular & Tailwind CSS. It is Free
-                        and Open Source.
-                      </textarea
-                  >
-                </div>
-              </div>
-            </div>
           </form>
         </div>
       </div>
@@ -200,7 +284,7 @@
         <button
           class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
           type="button"
-          (click)="closeToggleModal()"
+          (click)="onSubmit()"
         >
           Save Changes
         </button>

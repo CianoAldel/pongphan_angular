@@ -1,6 +1,5 @@
 export interface Detail {
-  DateIn: string;
-  PriceStay: string;
+  DateIn: Date;
   Charge: number;
   Firstname: string;
   Lastname: string;
@@ -10,16 +9,17 @@ export interface Detail {
   Occupation: string;
   Comefrom: string;
   Goto: string;
-  Checkout: string;
+  Checkout: Date;
   Note: string;
-  QuantityStay: string;
+  QuantityStay: number;
   PriceRoom: string;
-  SumPrice: string;
-  RoomNo: RoomNo;
+  SumPrice: number;
+  RoomNo: string;
+  Fee: number;
   CreatedAt?: Date;
   UpdateAt?: Date;
 }
 
-interface RoomNo {
-  options: Array<string>;
-}
+// interface RoomNo {
+//   options: Array<string>;
+// }

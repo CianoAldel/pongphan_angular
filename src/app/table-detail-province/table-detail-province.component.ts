@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../components/delete/delete.component';
 import autoTable from 'jspdf-autotable';
 import { font } from './util';
+import { DetailService } from '../services/detail.service';
+import { Province } from '../Interface/Province';
 
 @Component({
   selector: 'app-table-detail-province',
@@ -27,11 +29,21 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
   @Input() formShowRoom!: boolean;
   @Output() changePageEvent = new EventEmitter<boolean>();
   dataChangePage!: boolean;
+  dataSource: any;
+  province: Array<Province> = [];
 
-  constructor(private matDialog: MatDialog) {}
+  constructor(
+    private matDialog: MatDialog,
+    private detailService: DetailService
+  ) {}
 
   ngOnInit(): void {
-    // throw new Error('Method not implemented.');
+    this.detailService.getProvince().subscribe((response: Province[]) => {
+      this.province = response;
+
+      this.dataSource = new MatTableDataSource<Province>(this.province);
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   findDataTable(inputData: string) {}
@@ -44,22 +56,43 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
     }
   }
 
-  edit() {
-    this.matDialog.open(EditComponent);
+  edit(id: number) {
+    this.matDialog.open(EditComponent, {
+      data: {
+        id: id,
+      },
+    });
   }
 
-  delete() {
-    this.matDialog.open(DeleteComponent);
+  delete(id: number) {
+    this.matDialog.open(DeleteComponent, {
+      data: {
+        id: id,
+      },
+    });
   }
 
-  displayedColumns: string[] = ['no', 'idnumber', 'name', 'tel', 'action'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = [
+    'dateIn',
+    'roomNo',
+    'firstname',
+    'lastname',
+    'nationality',
+    'idCard',
+    'address',
+    'occupation',
+    'comeFrom',
+    'goTo',
+    'checkOut',
+    'note',
+    'action',
+  ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  // dataSource = new MatTableDataSource<Province>([...this.province]);
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {}
 
   //input amount parameter
 
@@ -67,20 +100,48 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
     return keys;
   }
 
-  //y = horizontal
-  //x = vertical
-
   dowloadPDF() {
-    var headers = this.createHeaders(['no', 'name', 'idnumber', 'tel']);
-    var doc = new jsPDF({ putOnlyUsedFonts: true, orientation: 'landscape' });
+    var headers = this.createHeaders([
+      'วันเวลาที่เข้ามาพัก',
+      'ห้องพักเลขที่',
+      'ชื่อ-นามสกุล',
+      'ห้องพักเลขที่',
+      'สัญชาติ',
+      'เลขประจำตัวประชาชน หรือ ใบสำคัญประจำตัวคนต่างด้าว หรือหนังสือเดินทาง เลขที่... ออกให้โดย...',
+      'ที่อยู่ปัจจุบันอยู่ที่ ตำบล อำเภอ จังหวัด หรือประเทศใด',
+      'อาชีพ',
+      'มาจากตำบล อำเภอ จังหวัดหรือประเทศใด',
+      'จะไปที่ ตำบล อำเภอ จังหวัด หรือประเทศใด',
+      'วันเวลาที่ออกไป',
+      'หมายเหตุ',
+    ]);
+    var doc = new jsPDF({
+      putOnlyUsedFonts: true,
+      orientation: 'landscape',
+      unit: 'mm',
+      format: [297, 210],
+    });
+
     doc.addFileToVFS('THSarabun-normal.ttf', font);
     doc.addFont('/assets/fonts/THSarabun-normal.ttf', 'THSarabun', 'normal');
     doc.setFont('THSarabun', 'normal');
 
     const info: any[] = [];
 
-    ELEMENT_DATA.forEach((element, index, array) => {
-      info.push([element.no, element.name, element.idnumber, element.tel]);
+    this.province.forEach((element, index, array) => {
+      info.push([
+        element.dateIn,
+        element.roomNo,
+        `${element.firstname} ${element.lastname}`,
+        element.nationality,
+        element.idCard,
+        element.address,
+        element.occupation,
+        element.comeFrom,
+        element.goTo,
+        element.checkOut,
+        element.note,
+      ]);
     });
     doc.text('ทะเบียนผู้พักในโรงแรม ผ่องพรรณรีสอร์ท', 115, 10);
     doc.text(
@@ -98,16 +159,18 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
     autoTable(doc, {
       head: [headers],
       body: info,
+
       margin: { top: 30 },
       headStyles: {
         fontStyle: 'bold',
         textColor: [0, 0, 0],
-        fillColor: [204, 204, 204],
+        fillColor: [255, 255, 255],
       },
       styles: {
-        lineWidth: 0.5,
+        fillColor: [255, 255, 255],
+        lineWidth: 0.1,
         lineColor: [0, 0, 0],
-        fontSize: 18,
+        fontSize: 14,
         font: 'THSarabun',
         fontStyle: 'normal',
         valign: 'middle',
@@ -117,38 +180,3 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
     doc.save('hotel_pongphan_district.pdf');
   }
 }
-
-export interface PeriodicElement {
-  no: string;
-  idnumber: string;
-  name: string;
-  tel: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    no: '1',
-    name: 'อินพัฒน์ วงค์อุประ',
-    idnumber: '1460300204277',
-    tel: '0812891346',
-  },
-  { no: '2', name: 'Helium', idnumber: '1460300204277', tel: 'He' },
-  { no: '3', name: 'Lithium', idnumber: '6.941', tel: 'Li' },
-  { no: '4', name: 'Beryllium', idnumber: '9.0122', tel: 'Be' },
-  { no: '5', name: 'Boron', idnumber: '10.811', tel: 'B' },
-  { no: '6', name: 'Carbon', idnumber: '12.0107', tel: 'C' },
-  { no: '7', name: 'Nitrogen', idnumber: '14.0067', tel: 'N' },
-  { no: '8', name: 'Oxygen', idnumber: '15.9994', tel: 'O' },
-  { no: '9', name: 'Fluorine', idnumber: '18.9984', tel: 'F' },
-  { no: '10', name: 'Neon', idnumber: '20.1797', tel: 'Ne' },
-  { no: '11', name: 'Sodium', idnumber: '22.9897', tel: 'Na' },
-  { no: '12', name: 'Magnesium', idnumber: '24.305', tel: 'Mg' },
-  { no: '13', name: 'Aluminum', idnumber: '26.9815', tel: 'Al' },
-  { no: '14', name: 'Silicon', idnumber: '28.0855', tel: 'Si' },
-  { no: '15', name: 'Phosphorus', idnumber: '30.9738', tel: 'P' },
-  { no: '16', name: 'Sulfur', idnumber: '32.065', tel: 'S' },
-  { no: '17', name: 'Chlorine', idnumber: '35.453', tel: 'Cl' },
-  { no: '18', name: 'Argon', idnumber: '39.948', tel: 'Ar' },
-  { no: '19', name: 'Potassium', idnumber: '39.0983', tel: 'K' },
-  { no: '20', name: 'Calcium', idnumber: '40.078', tel: 'Ca' },
-];

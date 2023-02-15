@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { AddComponent } from './components/add/add.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,7 @@ import { AddComponent } from './components/add/add.component';
 export class AppComponent implements AfterViewInit, OnInit {
   title = 'pongphan';
   active!: boolean;
+  textNavChild: string;
 
   @ViewChild(AddComponent) childActive: any;
 
@@ -20,5 +22,9 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
     // Promise.resolve().then(() => (this.active = this.childActive.childMessage));
+  }
+
+  receiveChangePageEvent(event: string) {
+    this.textNavChild = event;
   }
 }

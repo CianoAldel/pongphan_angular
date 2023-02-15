@@ -32,3 +32,15 @@ ng g c [name]
 ## generate service
 
 ng g s services/user
+
+## generate model and mapping model
+
+Scaffold-DbContext "Server=.\SQLExpress;Database=pongphan_db;Trusted_Connection=True;TrustServerCertificate=True
+" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+
+## rename database
+
+use master
+ALTER DATABASE phogphan_db SET SINGLE_USER WITH ROLLBACK IMMEDIATE  
+ALTER DATABASE phogphan_db MODIFY NAME = [pongphan_db]
+ALTER DATABASE [pongphan_db] SET MULTI_USER

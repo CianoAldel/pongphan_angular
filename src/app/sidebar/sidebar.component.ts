@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,10 +7,19 @@ import { Component } from '@angular/core';
 })
 export class SidebarComponent {
   collapseShow = 'hidden';
+
+  textNavBar: string;
+
+  @Output() changePageEvent = new EventEmitter<string>();
+
   constructor() {}
 
   ngOnInit() {}
   toggleCollapseShow(classes: any) {
     this.collapseShow = classes;
+  }
+
+  pageChange(text: string) {
+    return this.changePageEvent.emit(text);
   }
 }

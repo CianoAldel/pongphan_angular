@@ -2,9 +2,9 @@
   <div class="mx-10">
     <div *ngIf="switchComponent; then thenBlock; else elseBlock"></div>
     <ng-template #thenBlock>
-      <app-table-detail-province
+      <app-table-detail-district
         (changePageEvent)="receiveChangeEvent($event)"
-      ></app-table-detail-province>
+      ></app-table-detail-district>
     </ng-template>
     <ng-template #elseBlock>
       <app-add (changePageEvent)="receiveChangeEvent($event)"></app-add>

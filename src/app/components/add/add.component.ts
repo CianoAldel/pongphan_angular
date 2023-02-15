@@ -15,9 +15,9 @@ import { Detail } from '../../Interface/Detail';
 export class AddComponent implements OnInit {
   dataChangePage!: boolean;
   @Output() changePageEvent = new EventEmitter<boolean>();
+  @Input() modalId: number;
 
-  dateIn: string;
-  priceStay: string;
+  dateIn: Date;
   charge: number;
   firstname: string;
   lastname: string;
@@ -27,14 +27,12 @@ export class AddComponent implements OnInit {
   occupation: string;
   comefrom: string;
   goto: string;
-  checkout: string;
+  checkout: Date;
   note: string;
-  quantityStay: string;
+  quantityStay: number;
   priceroom: string;
-  sumprice: string;
-  roomNo: any = {
-    options: [],
-  };
+  sumprice: number;
+  roomNo: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,8 +54,7 @@ export class AddComponent implements OnInit {
     const minute = new Date().getMinutes();
     event.setHours(hour);
     event.setMinutes(minute);
-    this.dateIn = moment(event).format('YYYY-MM-DD HH:mm');
-    console.log('DateIn', this.dateIn);
+    this.dateIn = new Date(moment(event).format('YYYY-MM-DD HH:mm'));
   }
 
   receiveCheckOutEvent(event: Date) {
@@ -65,14 +62,14 @@ export class AddComponent implements OnInit {
     const minute = new Date().getMinutes();
     event.setHours(hour);
     event.setMinutes(minute);
-    this.checkout = moment(event).format('YYYY-MM-DD HH:mm');
+    this.checkout = new Date(moment(event).format('YYYY-MM-DD HH:mm'));
+
     console.log('dateCheckOut', this.checkout);
   }
 
   onSubmit() {
-    var test: Detail = {
+    var detail: Detail = {
       DateIn: this.dateIn,
-      PriceStay: this.priceStay,
       Charge: this.charge,
       Firstname: this.firstname,
       Lastname: this.lastname,
@@ -87,14 +84,17 @@ export class AddComponent implements OnInit {
       QuantityStay: this.quantityStay,
       PriceRoom: this.priceroom,
       SumPrice: this.sumprice,
-      RoomNo: this.roomNo.to,
+      Fee: this.charge,
+      RoomNo: this.roomNo,
     };
 
-    this.detailService.saveDetail(test);
+    console.log('detail form', detail);
+
+    this.detailService.saveDetail(detail);
   }
 
-  receiveValue(event: string) {
-    this.charge = parseInt(event) / 100;
+  receiveValue(event: number) {
+    this.charge = event / 100;
   }
 
   selectOptions: Array<string> = [
@@ -116,8 +116,7 @@ export class AddComponent implements OnInit {
 
   selectChange = (event: any) => {
     const key: string = event.key;
-    this.roomNo[key] = [...event.data];
 
-    console.log(this.roomNo);
+    this.roomNo = [...event.data].toString();
   };
 }

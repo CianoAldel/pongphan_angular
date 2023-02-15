@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SidebarComponent } from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-navbar',
@@ -8,13 +9,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
   routePath: string;
+  @Input() textNav: string;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
-    // this.routePath = this.router.url;
-    // console.log(this.router.url);
-    
-    console.log(this.route.snapshot.url)
+    this.textNav = 'รายการข้อมูลจังหวัด';
   }
 }
