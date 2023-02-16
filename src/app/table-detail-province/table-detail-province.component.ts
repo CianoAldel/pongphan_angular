@@ -18,6 +18,7 @@ import { font } from './util';
 import { DetailService } from '../services/detail.service';
 import { Province } from '../Interface/Province';
 import * as moment from 'moment';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-table-detail-province',
@@ -29,6 +30,7 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
 
   @Input() formShowRoom!: boolean;
   @Output() changePageEvent = new EventEmitter<boolean>();
+
   dataChangePage!: boolean;
   dataSource: any;
   province: Array<Province> = [];
@@ -53,7 +55,10 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
     });
   }
 
-  findDataTable(inputData: string) {}
+  findDataTable(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue;
+  }
 
   changePage(data: boolean) {
     this.dataChangePage = data;
@@ -165,7 +170,6 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
     autoTable(doc, {
       head: [headers],
       body: info,
-
       margin: { top: 30 },
       headStyles: {
         halign: 'center',

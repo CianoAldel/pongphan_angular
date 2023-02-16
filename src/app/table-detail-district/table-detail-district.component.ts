@@ -83,6 +83,9 @@ export class TableDetailDistrictComponent implements AfterViewInit, OnInit {
     ELEMENT_DATA.forEach((element, index, array) => {
       info.push([element.no, element.name, element.idnumber, element.tel]);
     });
+
+    doc.setFontSize(16);
+    doc.setTextColor(40);
     doc.text('ทะเบียนผู้พักในโรงแรม ผ่องพรรณรีสอร์ท', 115, 10);
     doc.text(
       '301 หมู่ 3 ตำบลดงมะดะ อำเภอแม่ลาว จังหวัดเชียงราย 57250',
@@ -96,10 +99,38 @@ export class TableDetailDistrictComponent implements AfterViewInit, OnInit {
     );
     doc.text('Tel. 086 192 6139', 130, 26);
 
+    // Footer
+    var str = 'ขอรับรองว่าเป็นความจริงทุกประการ';
+    var str1 = 'ลงชื่อ .......................................ผู้จัดการ';
+    var str2 = '(                                              )';
+
+    doc.setFontSize(16);
+    doc.text(str, 211, 180);
+    doc.text(str1, 210, 188);
+    doc.text(str2, 210, 194);
+
+    let finalY = (doc as any).lastAutoTable.finalY + 10;
     autoTable(doc, {
       head: [headers],
+      showHead: 'everyPage',
       body: info,
-      margin: { top: 30 },
+      margin: { top: 30, bottom: 50 },
+      didDrawPage: function (data) {
+        console.log(data);
+        if (data.pageNumber > 1) {
+          var text = 'gg';
+          doc.text(text, 14, 20);
+
+          var str = 'ขอรับรองว่าเป็นความจริงทุกประการ';
+          var str1 = 'ลงชื่อ .......................................ผู้จัดการ';
+          var str2 = '(                                              )';
+
+          doc.setFontSize(16);
+          doc.text(str, 211, 180);
+          doc.text(str1, 210, 188);
+          doc.text(str2, 210, 194);
+        }
+      },
       headStyles: {
         fontStyle: 'bold',
         textColor: [0, 0, 0],
