@@ -1,9 +1,9 @@
-export interface District {
+export interface Province {
   id: number;
+  no: number;
   firstname?: string;
   lastname?: string;
-  dateIn?: Date;
-  roomNo?: string;
+  dateIn: Date | string;
   quantityStay?: number;
   priceRoom?: string;
   sumPrice?: number;

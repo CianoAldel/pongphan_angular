@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DetailService } from 'src/app/services/detail.service';
+import { DetailService } from 'src/services/detail.service';
 import { formatDate } from '@angular/common';
 import { FormBuilder } from '@angular/forms';
 
 import * as moment from 'moment';
-import { Detail } from '../../Interface/Detail';
+import { Detail } from '../../../Interface/Detail';
 
 @Component({
   selector: 'app-add',

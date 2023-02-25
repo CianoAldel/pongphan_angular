@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DetailService } from 'src/app/services/detail.service';
+import { DetailService } from 'src/services/detail.service';
 
 @Component({
   selector: 'app-delete',

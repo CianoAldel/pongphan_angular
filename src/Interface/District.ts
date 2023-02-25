@@ -1,5 +1,6 @@
-export interface Province {
+export interface District {
   id: number;
+  no: number;
   dateIn: Date | string;
   roomNo: string | null;
   firstname: string;
@@ -10,6 +11,6 @@ export interface Province {
   occupation: string | null;
   comeFrom: string | null;
   goTo: string | null;
-  checkOut: Date | string | null;
+  checkOut: Date | string;
   note: string | null;
 }

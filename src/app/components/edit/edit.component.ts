@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import * as moment from 'moment';
-import { Detail } from 'src/app/Interface/Detail';
-import { DetailService } from 'src/app/services/detail.service';
+import { Detail } from 'src/Interface/Detail';
+import { DetailService } from 'src/services/detail.service';
 import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 

@@ -4,8 +4,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Detail } from '../Interface/Detail';
 import { retry, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Province } from '../Interface/Province';
 import { District } from '../Interface/District';
+import { Province } from '../Interface/Province';
 
 @Injectable({
   providedIn: 'root',
@@ -59,9 +59,9 @@ export class DetailService {
     return this.http.get<Province[]>(url);
   }
 
-  getDistrict(): Observable<District> {
+  getDistrict(): Observable<District[]> {
     const url = 'https://localhost:7088/api/PongphanDetail/GetDistrict';
 
-    return this.http.get<District>(url);
+    return this.http.get<District[]>(url);
   }
 }

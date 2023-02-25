@@ -15,6 +15,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../components/delete/delete.component';
 import autoTable from 'jspdf-autotable';
 import { font } from './util';
+import { DetailService } from 'src/services/detail.service';
+import { District } from 'src/Interface/District';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-table-detail-district',
@@ -24,15 +27,30 @@ import { font } from './util';
 })
 export class TableDetailDistrictComponent implements AfterViewInit, OnInit {
   inputData!: string;
-
+  district: Array<District> = [];
+  dataSource: any;
   @Input() formShowRoom!: boolean;
   @Output() changePageEvent = new EventEmitter<boolean>();
   dataChangePage!: boolean;
 
-  constructor(private matDialog: MatDialog) {}
+  constructor(
+    private matDialog: MatDialog,
+    private detailService: DetailService
+  ) {}
 
   ngOnInit(): void {
-    // throw new Error('Method not implemented.');
+    this.detailService.getDistrict().subscribe((response: District[]) => {
+      this.district = response;
+
+      this.district.map((array, index) => {
+        array.no = index + 1;
+        array.dateIn = moment(array.dateIn).format('YYYY-MM-DD HH:mm');
+        array.checkOut = moment(array.checkOut).format('YYYY-MM-DD HH:mm');
+      });
+
+      this.dataSource = new MatTableDataSource<District>(this.district);
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   findDataTable(inputData: string) {}
@@ -45,22 +63,17 @@ export class TableDetailDistrictComponent implements AfterViewInit, OnInit {
     }
   }
 
-  edit() {
+  edit(id: number) {
     this.matDialog.open(EditComponent);
   }
 
-  delete() {
+  delete(id: number) {
     this.matDialog.open(DeleteComponent);
   }
 
-  displayedColumns: string[] = ['no', 'idnumber', 'name', 'tel', 'action'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  ngAfterViewInit() {}
 
   //input amount parameter
 
@@ -68,78 +81,153 @@ export class TableDetailDistrictComponent implements AfterViewInit, OnInit {
     return keys;
   }
 
+  displayedColumns: string[] = [
+    'no',
+    'dateIn',
+    'roomNo',
+    'firstname',
+    'lastname',
+    'nationality',
+    'idCard',
+    'address',
+    'occupation',
+    'comeFrom',
+    'goTo',
+    'checkOut',
+    'note',
+    'action',
+  ];
+
   //y = horizontal
   //x = vertical
 
   dowloadPDF() {
-    var headers = this.createHeaders(['no', 'name', 'idnumber', 'tel']);
+    var headers = this.createHeaders([
+      'ลำดับ No.',
+      'วันเวลาที่เข้ามาพัก Date and Time of Arrival',
+      'ห้องพักเลขที่ Room No.',
+      '            ชื่อตัวและชื่อสกุล              Guest Name',
+      'สัญชาติ Nationality',
+      'เลขประจำตัวประชาชนหรือ เลขที่ใบสำคัญประจำตัว คนต่างด้าว หรือเลขที่ หนังสือเดินทาง Identification Card No. or Alien Registration Book No. or Passport No. ',
+      '         ที่อยู่ปัจจุบัน          Current Address',
+      '   อาชีพ     Occupation',
+      '   มาจากตำบล   อำเภอ จังหวัด หรือประเทศใด Place of Departure',
+      'จะไปที่ ตำบล อำเภอ จังหวัด หรือประเทศใด Next Destination',
+      '  วันที่    ออกไป Exprected Departure',
+      'หมายเหตุ Remarks',
+    ]);
     var doc = new jsPDF({ putOnlyUsedFonts: true, orientation: 'landscape' });
     doc.addFileToVFS('THSarabun-normal.ttf', font);
     doc.addFont('/assets/fonts/THSarabun-normal.ttf', 'THSarabun', 'normal');
     doc.setFont('THSarabun', 'normal');
 
+    doc.setFontSize(13);
+    doc.text('ร.ร.๔', 265, 10);
+
     const info: any[] = [];
 
-    ELEMENT_DATA.forEach((element, index, array) => {
-      info.push([element.no, element.name, element.idnumber, element.tel]);
+    this.district.forEach((element, index, array) => {
+      info.push([
+        index + 1,
+        element.dateIn,
+        element.roomNo,
+        `${element.firstname} ${element.lastname}`,
+        element.nationality,
+        element.idCard,
+        element.address,
+        element.occupation,
+        element.comeFrom,
+        element.goTo,
+        element.checkOut,
+        element.note,
+      ]);
     });
 
-    doc.setFontSize(16);
+    doc.setFontSize(20);
     doc.setTextColor(40);
-    doc.text('ทะเบียนผู้พักในโรงแรม ผ่องพรรณรีสอร์ท', 115, 10);
-    doc.text(
-      '301 หมู่ 3 ตำบลดงมะดะ อำเภอแม่ลาว จังหวัดเชียงราย 57250',
-      100,
-      15
-    );
-    doc.text(
-      '301 Moo 3 Tombon Dong Mada,Mae Lao Distric,Chiang Rai Province 57250, Thailand',
-      80,
-      20
-    );
-    doc.text('Tel. 086 192 6139', 130, 26);
 
-    // Footer
-    var str = 'ขอรับรองว่าเป็นความจริงทุกประการ';
-    var str1 = 'ลงชื่อ .......................................ผู้จัดการ';
-    var str2 = '(                                              )';
+    // doc.text('ทะเบียนผู้พักในโรงแรม ผ่องพรรณรีสอร์ท', 112, 10);
+    // doc.text(
+    //   '301 หมู่ 3 ตำบลดงมะดะ อำเภอแม่ลาว จังหวัดเชียงราย 57250',
+    //   100,
+    //   17
+    // );
+    // doc.text(
+    //   '301 Moo 3 Tombon Dong Mada, Mae Lao Distric, Chiang Rai Province 57250, Thailand',
+    //   80,
+    //   24
+    // );
+    // doc.text('Tel. 086 192 6139', 130, 31);
 
-    doc.setFontSize(16);
-    doc.text(str, 211, 180);
-    doc.text(str1, 210, 188);
-    doc.text(str2, 210, 194);
+    doc.text('ทะเบียนผู้พักในโรงแรม ผ่องพรรณ รีสอร์ท', 110, 17);
+    doc.text(
+      'ประจำเดือน.................................................พ.ศ. ............................',
+      93,
+      33
+    );
+
+    var str1 = 'ขอรับรองว่าเป็นความจริงทุกประการ';
+    var str2 =
+      '(ลงชื่อ)............................................................ผู้จัดการ';
+
+    doc.setFontSize(14);
+    doc.text(str1, 230, 185);
+    doc.text(str2, 222, 195);
 
     let finalY = (doc as any).lastAutoTable.finalY + 10;
     autoTable(doc, {
       head: [headers],
       showHead: 'everyPage',
       body: info,
-      margin: { top: 30, bottom: 50 },
+      bodyStyles: { halign: 'center' },
+      margin: { left: 22, top: 45, bottom: 25 },
+      columnStyles: {
+        0: { cellWidth: 10 },
+        1: { cellWidth: 25 },
+        2: { cellWidth: 15 },
+        3: { cellWidth: 40 },
+        4: { cellWidth: 15 },
+        5: { cellWidth: 30 },
+        6: { cellWidth: 35 },
+        7: { cellWidth: 16 },
+        8: { cellWidth: 22 },
+        9: { cellWidth: 22 },
+        10: { cellWidth: 15 },
+        11: { cellWidth: 15 },
+      },
+      didParseCell: function (data) {
+        data.cell.styles.fillColor = '#ffffff';
+        //setting header align top
+        if (data.section === 'head') {
+          data.cell.styles.valign = 'top';
+          data.cell.styles.fontSize = 10;
+        }
+      },
       didDrawPage: function (data) {
-        console.log(data);
         if (data.pageNumber > 1) {
-          var text = 'gg';
+          var text = 'ใบต่อ';
           doc.text(text, 14, 20);
 
-          var str = 'ขอรับรองว่าเป็นความจริงทุกประการ';
-          var str1 = 'ลงชื่อ .......................................ผู้จัดการ';
-          var str2 = '(                                              )';
+          var str1 = 'ขอรับรองว่าเป็นความจริงทุกประการ';
+          var str2 =
+            '(ลงชื่อ)..........................................................ผู้จัดการ';
 
-          doc.setFontSize(16);
-          doc.text(str, 211, 180);
-          doc.text(str1, 210, 188);
-          doc.text(str2, 210, 194);
+          doc.setFontSize(14);
+          doc.text(str1, 222, 190);
+          doc.text(str2, 222, 195);
         }
       },
       headStyles: {
+        halign: 'center',
         fontStyle: 'bold',
         textColor: [0, 0, 0],
-        fillColor: [204, 204, 204],
+        fillColor: [255, 255, 255],
       },
       styles: {
-        lineWidth: 0.5,
+        fillColor: [255, 255, 255],
+        lineWidth: 0.1,
         lineColor: [0, 0, 0],
-        fontSize: 18,
+        fontSize: 14,
         font: 'THSarabun',
         fontStyle: 'normal',
         valign: 'middle',
@@ -149,38 +237,3 @@ export class TableDetailDistrictComponent implements AfterViewInit, OnInit {
     doc.save('hotel_pongphan_district.pdf');
   }
 }
-
-export interface PeriodicElement {
-  no: string;
-  idnumber: string;
-  name: string;
-  tel: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    no: '1',
-    name: 'อินพัฒน์ วงค์อุประ',
-    idnumber: '1460300204277',
-    tel: '0812891346',
-  },
-  { no: '2', name: 'Helium', idnumber: '1460300204277', tel: 'He' },
-  { no: '3', name: 'Lithium', idnumber: '6.941', tel: 'Li' },
-  { no: '4', name: 'Beryllium', idnumber: '9.0122', tel: 'Be' },
-  { no: '5', name: 'Boron', idnumber: '10.811', tel: 'B' },
-  { no: '6', name: 'Carbon', idnumber: '12.0107', tel: 'C' },
-  { no: '7', name: 'Nitrogen', idnumber: '14.0067', tel: 'N' },
-  { no: '8', name: 'Oxygen', idnumber: '15.9994', tel: 'O' },
-  { no: '9', name: 'Fluorine', idnumber: '18.9984', tel: 'F' },
-  { no: '10', name: 'Neon', idnumber: '20.1797', tel: 'Ne' },
-  { no: '11', name: 'Sodium', idnumber: '22.9897', tel: 'Na' },
-  { no: '12', name: 'Magnesium', idnumber: '24.305', tel: 'Mg' },
-  { no: '13', name: 'Aluminum', idnumber: '26.9815', tel: 'Al' },
-  { no: '14', name: 'Silicon', idnumber: '28.0855', tel: 'Si' },
-  { no: '15', name: 'Phosphorus', idnumber: '30.9738', tel: 'P' },
-  { no: '16', name: 'Sulfur', idnumber: '32.065', tel: 'S' },
-  { no: '17', name: 'Chlorine', idnumber: '35.453', tel: 'Cl' },
-  { no: '18', name: 'Argon', idnumber: '39.948', tel: 'Ar' },
-  { no: '19', name: 'Potassium', idnumber: '39.0983', tel: 'K' },
-  { no: '20', name: 'Calcium', idnumber: '40.078', tel: 'Ca' },
-];

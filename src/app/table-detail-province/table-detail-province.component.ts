@@ -15,10 +15,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteComponent } from '../components/delete/delete.component';
 import autoTable from 'jspdf-autotable';
 import { font } from './util';
-import { DetailService } from '../services/detail.service';
-import { Province } from '../Interface/Province';
+import { DetailService } from '../../services/detail.service';
 import * as moment from 'moment';
-import { MatSort } from '@angular/material/sort';
+import { Province } from 'src/Interface/Province';
 
 @Component({
   selector: 'app-table-detail-province',
@@ -46,8 +45,8 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
       this.province = response;
 
       this.province.map((array, index) => {
+        array.no = index + 1;
         array.dateIn = moment(array.dateIn).format('YYYY-MM-DD HH:mm');
-        array.checkOut = moment(array.checkOut).format('YYYY-MM-DD HH:mm');
       });
 
       this.dataSource = new MatTableDataSource<Province>(this.province);
@@ -85,22 +84,19 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
   }
 
   displayedColumns: string[] = [
-    'dateIn',
-    'roomNo',
+    'no',
     'firstname',
     'lastname',
-    'nationality',
-    'idCard',
-    'address',
-    'occupation',
-    'comeFrom',
-    'goTo',
-    'checkOut',
+    'dateIn',
+    'quantityStay',
+    'priceRoom',
+    'sumPrice',
+    'fee',
     'note',
     'action',
   ];
 
-  // dataSource = new MatTableDataSource<Province>([...this.province]);
+  // dataSource = new MatTableDataSource<District>([...this.province]);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -114,18 +110,16 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
 
   dowloadPDF() {
     var headers = this.createHeaders([
-      'วันเวลาที่เข้ามาพัก',
-      'ห้องพักเลขที่',
-      'ชื่อ-นามสกุล',
-      'สัญชาติ',
-      'เลขประจำตัวประชาชน หรือ ใบสำคัญประจำตัวคนต่างด้าว หรือหนังสือเดินทาง เลขที่... ออกให้โดย...',
-      'ที่อยู่ปัจจุบันอยู่ที่ ตำบล อำเภอ จังหวัด หรือประเทศใด',
-      'อาชีพ',
-      'มาจากตำบล อำเภอ จังหวัดหรือประเทศใด',
-      'จะไปที่ ตำบล อำเภอ จังหวัด หรือประเทศใด',
-      'วันเวลาที่ออกไป',
-      'หมายเหตุ',
+      '  ๑   ที่',
+      '                          ๒                                                ชื่อ-สกุล                                                           ',
+      '        ๓        วันเวลาที่ เข้ามาพัก',
+      '        ๔        รวมจำนวน วันที่เข้าพัก',
+      '        ๕        ห้องพักราคา บาท',
+      '        ๖        รวมเป็นเงิน ค่าเช่าห้องพัก บาท',
+      '        ๗        รวมเป็นเงิน ค่าธรรมเนียม',
+      '                                       หมายเหตุ                                  ',
     ]);
+
     var doc = new jsPDF({
       putOnlyUsedFonts: true,
       orientation: 'landscape',
@@ -137,40 +131,85 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
     doc.addFont('/assets/fonts/THSarabun-normal.ttf', 'THSarabun', 'normal');
     doc.setFont('THSarabun', 'normal');
 
+    doc.setFontSize(15);
+    doc.text('แบบ อบจ.รร.๖', 255, 26);
+
     const info: any[] = [];
 
     this.province.forEach((element, index, array) => {
       info.push([
-        element.dateIn,
-        element.roomNo,
+        index + 1,
         `${element.firstname} ${element.lastname}`,
-        element.nationality,
-        element.idCard,
-        element.address,
-        element.occupation,
-        element.comeFrom,
-        element.goTo,
-        element.checkOut,
-        element.note,
+        element.dateIn,
+        element.quantityStay,
+        element.priceRoom,
+        element.sumPrice,
+        element.fee,
       ]);
     });
-    doc.text('ทะเบียนผู้พักในโรงแรม ผ่องพรรณรีสอร์ท', 115, 10);
+
+    doc.setFontSize(16);
     doc.text(
-      '301 หมู่ 3 ตำบลดงมะดะ อำเภอแม่ลาว จังหวัดเชียงราย 57250',
-      100,
-      15
+      'บัญชีผู้พักและรายละเอียดในการเรียกค่าธรรมเนียมบำรุงองค์การบริหารส่วนจังหวัด',
+      90,
+      36
     );
     doc.text(
-      '301 Moo 3 Tombon Dong Mada,Mae Lao Distric,Chiang Rai Province 57250, Thailand',
-      80,
-      20
+      'วันที่......................เดือน............................................พ.ศ.......................................',
+      160,
+      43
     );
-    doc.text('Tel. 086 192 6139', 130, 26);
+    doc.text(
+      'เจ้าของ/เจ้าสำนักโรงแรม.............................................................................ได้จัดทำรายการของผู้พักในโรงแรมประจำเดือน.............................................พ.ศ.........................',
+      30,
+      50
+    );
+    doc.text('ยื่นต่อองค์การบริหารส่วนจังหวัด ดังมีข้อความต่อไปนี้', 30, 57);
+
+    var str1 =
+      'ลงชื่อ ......................................................ผู้แจ้ง/ตรวจ';
+    var str2 = '(..........................................................)';
+
+    doc.text(str1, 216, 190);
+    doc.text(str2, 222, 195);
+    doc.setTextColor(40);
+
+    let pageWidth = doc.internal.pageSize.width;
+    let wantedTableWidth = 240;
+    let margin = (pageWidth - wantedTableWidth) / 2;
 
     autoTable(doc, {
       head: [headers],
+      showHead: 'everyPage',
       body: info,
-      margin: { top: 30 },
+      bodyStyles: { halign: 'center' },
+      columnStyles: {
+        0: { cellWidth: 10 },
+        1: { cellWidth: 60 },
+        2: { cellWidth: 25 },
+        3: { cellWidth: 25 },
+        4: { cellWidth: 25 },
+        5: { cellWidth: 30 },
+        6: { cellWidth: 35 },
+        7: { cellWidth: 35 },
+        8: { cellWidth: 60 },
+      },
+      margin: { left: margin, right: margin, top: 60, bottom: 25 },
+      didParseCell: function (data) {
+        data.cell.styles.fillColor = '#ffffff';
+      },
+      didDrawPage: function (data) {
+        if (data.pageNumber > 1) {
+          var str = 'ขอรับรองว่าเป็นความจริงทุกประการ';
+          var str1 = 'ลงชื่อ .......................................ผู้จัดการ';
+          var str2 = '(                                              )';
+
+          doc.setFontSize(16);
+          doc.text(str, 240, 180);
+          doc.text(str1, 240, 188);
+          doc.text(str2, 240, 194);
+        }
+      },
       headStyles: {
         halign: 'center',
         fontStyle: 'bold',
@@ -188,6 +227,6 @@ export class TableDetailProvinceComponent implements AfterViewInit, OnInit {
       },
     });
 
-    doc.save('hotel_pongphan_district.pdf');
+    doc.save('hotel_pongphan_province.pdf');
   }
 }

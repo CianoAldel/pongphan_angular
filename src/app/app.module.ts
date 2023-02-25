@@ -23,7 +23,7 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { MultiselectComponent } from './components/multiselect/multiselect.component';
 import { TableDetailProvinceComponent } from './table-detail-province/table-detail-province.component';
 import { TableDetailDistrictComponent } from './table-detail-district/table-detail-district.component';
-import { DetailService } from './services/detail.service';
+import { DetailService } from '../services/detail.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ShowDataDistrictComponent } from './show-data-district/show-data-district.component';
 import { ShowDataProvinceComponent } from './show-data-province/show-data-province.component';
