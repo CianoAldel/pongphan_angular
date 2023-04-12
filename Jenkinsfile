@@ -10,22 +10,22 @@ pipeline {
             }
         }
  
+        stage('build') {
+          steps {
+              echo 'build the application...'
+          }
+        }
+ 
         stage('test') {
           steps {
-              echo 'testing the application...'
+              echo 'test the application...'
           }
         }
  
         stage('deploy') {
-          steps {
-              echo 'deploying the application...'
-          }
-        }
- 
-//         stage('Deploy') {
             steps {
-              echo 'testing the deploy'
+              echo 'deploy the application'
             }
-//         }
+        }
     }
 }
